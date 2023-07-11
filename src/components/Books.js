@@ -1,32 +1,47 @@
+import { useQuery } from "@apollo/client"
+import { ALL_BOOKS } from "../queries"
+import { Table } from "react-bootstrap"
+
 const Books = (props) => {
-  if (!props.show) {
-    return null
-  }
+	const result = useQuery(ALL_BOOKS, {
+		pollInterval: 10000,
+	})
 
-  const books = []
+	if (result.loading) {
+		return <div>loading...</div>
+	}
 
-  return (
-    <div>
-      <h2>books</h2>
+	const books = result.data.allBooks
 
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>author</th>
-            <th>published</th>
-          </tr>
-          {books.map((a) => (
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author}</td>
-              <td>{a.published}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )
+	return (
+		<div>
+			<h1 style={{ marginBottom: "20px" }}>Books</h1>
+			<Table striped bordered hover>
+				<thead>
+					<tr>
+						<th>
+							<h3>Title</h3>
+						</th>
+						<th>
+							<h3>Author</h3>
+						</th>
+						<th>
+							<h3>Published</h3>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{books.map((b) => (
+						<tr key={b.title}>
+							<td>{b.title}</td>
+							<td>{b.author}</td>
+							<td>{b.published}</td>
+						</tr>
+					))}
+				</tbody>
+			</Table>
+		</div>
+	)
 }
 
 export default Books

@@ -12,10 +12,10 @@ const Authors = (props) => {
 	}
 
 	const authors = result.data.allAuthors
-	console.log(authors)
 
 	return (
 		<div>
+			<h1 style={{ marginBottom: "20px" }}>Authors</h1>
 			<Table striped bordered hover>
 				<thead>
 					<tr>
