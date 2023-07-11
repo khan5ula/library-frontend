@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client"
 import { ALL_BOOKS } from "../queries"
 import { Table } from "react-bootstrap"
 
-const Books = (props) => {
+const Books = () => {
 	const result = useQuery(ALL_BOOKS, {
 		pollInterval: 10000,
 	})
