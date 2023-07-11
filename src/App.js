@@ -1,26 +1,50 @@
-import { useState } from 'react'
-import Authors from './components/Authors'
-import Books from './components/Books'
-import NewBook from './components/NewBook'
+import { Button, Container, Row, Col } from "react-bootstrap"
+import Authors from "./components/Authors"
+import Books from "./components/Books"
+import NewBook from "./components/NewBook"
+import { Route, Routes, useNavigate } from "react-router-dom"
 
 const App = () => {
-  const [page, setPage] = useState('authors')
+	const navigate = useNavigate()
 
-  return (
-    <div>
-      <div>
-        <button onClick={() => setPage('authors')}>authors</button>
-        <button onClick={() => setPage('books')}>books</button>
-        <button onClick={() => setPage('add')}>add book</button>
-      </div>
-
-      <Authors show={page === 'authors'} />
-
-      <Books show={page === 'books'} />
-
-      <NewBook show={page === 'add'} />
-    </div>
-  )
+	return (
+		<Container style={{ marginTop: "20px" }}>
+			<Row>
+				<Col></Col>
+				<Col lg={true}>
+					<div style={{ marginBottom: "20px" }}>
+						<Button
+							variant="outline-secondary"
+							style={{ marginRight: "5px" }}
+							onClick={() => navigate("/authors")}
+						>
+							authors
+						</Button>
+						<Button
+							variant="outline-secondary"
+							style={{ marginRight: "5px" }}
+							onClick={() => navigate("/books")}
+						>
+							books
+						</Button>
+						<Button
+							variant="outline-secondary"
+							onClick={() => navigate("/add-book")}
+						>
+							add book
+						</Button>
+					</div>
+					<Routes>
+						<Route path="/authors" element={<Authors />} />
+						<Route path="/books" element={<Books />} />
+						<Route path="/add-book" element={<NewBook />} />
+						<Route path="/" element={<Authors />} />
+					</Routes>
+				</Col>
+				<Col></Col>
+			</Row>
+		</Container>
+	)
 }
 
 export default App
