@@ -3,18 +3,14 @@ import { useState } from 'react'
 import { Button, FloatingLabel, Form, Table } from 'react-bootstrap'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 
-const Authors = () => {
+const Authors = ({ setError }) => {
   const [name, setName] = useState('')
   const [year, setYear] = useState('')
 
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
     onError: (error) => {
-      console.log(
-        `error occured while editing author information: ${JSON.stringify(
-          error
-        )}`
-      )
+      setError(error.graphQLErrors[0].message)
     },
   })
 
@@ -84,7 +80,9 @@ const Authors = () => {
           </Form.Select>
           <FloatingLabel label="year" className="mb-2">
             <Form.Control
+              placeholder="1969"
               value={year}
+              type="number"
               onChange={({ target }) => setYear(target.value)}
             />
           </FloatingLabel>

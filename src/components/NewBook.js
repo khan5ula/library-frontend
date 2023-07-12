@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Button, Container, FloatingLabel, Form } from 'react-bootstrap'
 import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK } from '../queries'
 
-const NewBook = () => {
+const NewBook = ({ setError }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('')
@@ -12,6 +12,9 @@ const NewBook = () => {
 
   const [createBook] = useMutation(CREATE_BOOK, {
     refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+    onError: (error) => {
+      setError(error.graphQLErrors[0].message)
+    },
   })
 
   const submit = async (event) => {
@@ -39,18 +42,21 @@ const NewBook = () => {
         <Form.Group>
           <FloatingLabel label="Title" className="mb-2">
             <Form.Control
+              placeholder="Big Book of Examples"
               value={title}
               onChange={({ target }) => setTitle(target.value)}
             />
           </FloatingLabel>
           <FloatingLabel label="Author" className="mb-2">
             <Form.Control
+              placeholder="Mr./Mrs. Writer Typewriterson"
               value={author}
               onChange={({ target }) => setAuthor(target.value)}
             />
           </FloatingLabel>
           <FloatingLabel label="Published" className="mb-2">
             <Form.Control
+              placeholder="1901"
               type="number"
               value={published}
               onChange={({ target }) => setPublished(target.value)}
@@ -58,6 +64,7 @@ const NewBook = () => {
           </FloatingLabel>
           <FloatingLabel label="Add genre" className="mb-2">
             <Form.Control
+              placeholder="crime"
               value={genre}
               onChange={({ target }) => setGenre(target.value)}
             />
