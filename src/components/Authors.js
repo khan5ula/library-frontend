@@ -70,18 +70,18 @@ const Authors = () => {
 
       <Form onSubmit={submitEditAuthor}>
         <Form.Group>
-          <FloatingLabel label="name" className="mb-2">
-            <Form.Control
-              value={name}
-              list="authorNameOptions"
-              onChange={({ target }) => setName(target.value)}
-            />
-            <datalist id="authorNameOptions">
-              {authors.map((author, index) => (
-                <option key={index} value={author.name} />
-              ))}
-            </datalist>
-          </FloatingLabel>
+          <Form.Select
+            className="mb-2"
+            aria-label="name"
+            onChange={({ target }) => setName(target.value)}
+          >
+            <option>Select author</option>
+            {authors.map((author, index) => (
+              <option key={index} value={author.name}>
+                {author.name}
+              </option>
+            ))}
+          </Form.Select>
           <FloatingLabel label="year" className="mb-2">
             <Form.Control
               value={year}
