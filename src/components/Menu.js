@@ -1,37 +1,44 @@
-import { Container, Nav } from 'react-bootstrap'
+import { Container, Nav, Navbar } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
 const Menu = () => {
+  const token = localStorage.getItem('library-user-token')
+
   const padding = {
     paddingLeft: 10,
   }
 
   return (
     <Container>
-      <Nav
-        fill
-        justify
-        variant="tabs"
-        defaultActiveKey="/"
-        className="justify-content-center"
-        style={{ marginBottom: '30px' }}
-      >
-        <Nav.Link href="/" as="span">
-          <Link style={padding} to="/">
-            Authors
-          </Link>
-        </Nav.Link>
-        <Nav.Link href="/books" as="span">
-          <Link style={padding} to="/books">
-            Books
-          </Link>
-        </Nav.Link>
-        <Nav.Link href="/add-book" as="span">
-          <Link style={padding} to="/add-book">
-            New Book
-          </Link>
-        </Nav.Link>
-      </Nav>
+      <Navbar style={{ marginBottom: '30px' }} bg="light" data-bs-theme="light">
+        <Container>
+          <Navbar.Brand>Library</Navbar.Brand>
+          <Nav className="me-auto">
+            <Nav.Link href="/" as="span">
+              <Link style={padding} to="/">
+                Authors
+              </Link>
+            </Nav.Link>
+            <Nav.Link href="/books" as="span">
+              <Link style={padding} to="/books">
+                Books
+              </Link>
+            </Nav.Link>
+            {token && (
+              <Nav.Link href="/add-book" as="span">
+                <Link style={padding} to="/add-book">
+                  New Book
+                </Link>
+              </Nav.Link>
+            )}
+            <Nav.Link href={token ? '/user' : '/login'} as="span">
+              <Link style={padding} to={token ? 'user' : 'login'}>
+                {token ? 'User' : 'Login'}
+              </Link>
+            </Nav.Link>
+          </Nav>
+        </Container>
+      </Navbar>
     </Container>
   )
 }
