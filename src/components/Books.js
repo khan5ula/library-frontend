@@ -1,20 +1,51 @@
 import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../queries'
-import { Table } from 'react-bootstrap'
+import { Container, Table, ButtonGroup, ToggleButton } from 'react-bootstrap'
+import { ALL_BOOKS, ALL_GENRES } from '../queries'
+import Loading from './Loading'
+import { useState, useEffect } from 'react'
 
 const Books = () => {
-  const result = useQuery(ALL_BOOKS, {
+  const booksResult = useQuery(ALL_BOOKS, {
     pollInterval: 10000,
   })
 
-  if (result.loading) {
-    return <div>loading...</div>
+  const genresResult = useQuery(ALL_GENRES, {
+    pollInterval: 10000,
+  })
+
+  const [checkedGenres, setCheckedGenres] = useState([])
+
+  useEffect(() => {
+    if (genresResult.data) {
+      const genres = genresResult.data.allGenres
+      const initialCheckedGenres = {}
+      genres.forEach((g) => {
+        initialCheckedGenres[g] = false
+      })
+      setCheckedGenres(initialCheckedGenres)
+    }
+  }, [genresResult.data])
+
+  if (booksResult.loading || genresResult.loading) {
+    return (
+      <div>
+        <Loading />
+      </div>
+    )
   }
 
-  const books = result.data.allBooks
+  const books = booksResult.data.allBooks
+  const genres = genresResult.data.allGenres
+
+  const handleToggle = (genre) => {
+    setCheckedGenres((state) => ({
+      ...state,
+      [genre]: !state[genre],
+    }))
+  }
 
   return (
-    <div>
+    <Container>
       <h1 style={{ marginBottom: '20px' }}>Books</h1>
       <Table striped bordered hover>
         <thead>
@@ -40,7 +71,24 @@ const Books = () => {
           ))}
         </tbody>
       </Table>
-    </div>
+      {genres.length > 0 && (
+        <ButtonGroup className="mb-2">
+          {genres.map((g) => (
+            <ToggleButton
+              key={g}
+              id={`toggle-check-${g}`}
+              size="sm"
+              type="checkbox"
+              variant="outline-primary"
+              checked={checkedGenres[g]}
+              onChange={() => handleToggle(g)}
+            >
+              {g}
+            </ToggleButton>
+          ))}
+        </ButtonGroup>
+      )}{' '}
+    </Container>
   )
 }
 

@@ -1,7 +1,8 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { useState } from 'react'
-import { Button, FloatingLabel, Form, Table } from 'react-bootstrap'
+import { Button, Container, FloatingLabel, Form, Table } from 'react-bootstrap'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
+import Loading from './Loading'
 
 const Authors = ({ setError }) => {
   const [name, setName] = useState('')
@@ -28,13 +29,17 @@ const Authors = ({ setError }) => {
   })
 
   if (result.loading) {
-    return <div>loading...</div>
+    return (
+      <div>
+        <Loading />
+      </div>
+    )
   }
 
   const authors = result.data.allAuthors
 
   return (
-    <div>
+    <Container>
       <h1 style={{ marginBottom: '20px' }}>Authors</h1>
       <Table striped bordered hover>
         <thead>
@@ -91,7 +96,7 @@ const Authors = ({ setError }) => {
           Update author
         </Button>
       </Form>
-    </div>
+    </Container>
   )
 }
 
