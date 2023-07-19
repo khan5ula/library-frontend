@@ -1,11 +1,28 @@
 import { useQuery } from '@apollo/client'
-import { Container, Table, ButtonGroup, ToggleButton } from 'react-bootstrap'
+import {
+  Container,
+  Table,
+  ButtonGroup,
+  ToggleButton,
+  Row,
+} from 'react-bootstrap'
 import { ALL_BOOKS, ALL_GENRES } from '../queries'
 import Loading from './Loading'
 import { useState, useEffect } from 'react'
 
 const Books = () => {
+  const [checkedGenres, setCheckedGenres] = useState([])
+
+  const selectedGenres = Object.keys(checkedGenres).filter(
+    (genre) => checkedGenres[genre]
+  )
+
+  const allGenresSelected = Object.values(checkedGenres).every(
+    (isChecked) => isChecked
+  )
+
   const booksResult = useQuery(ALL_BOOKS, {
+    variables: { genres: selectedGenres },
     pollInterval: 10000,
   })
 
@@ -13,14 +30,12 @@ const Books = () => {
     pollInterval: 10000,
   })
 
-  const [checkedGenres, setCheckedGenres] = useState([])
-
   useEffect(() => {
     if (genresResult.data) {
       const genres = genresResult.data.allGenres
       const initialCheckedGenres = {}
       genres.forEach((g) => {
-        initialCheckedGenres[g] = false
+        initialCheckedGenres[g] = true
       })
       setCheckedGenres(initialCheckedGenres)
     }
@@ -42,6 +57,19 @@ const Books = () => {
       ...state,
       [genre]: !state[genre],
     }))
+  }
+
+  const handleToggleAllGenres = () => {
+    setCheckedGenres((state) => {
+      const allChecked = Object.values(state).every((isChecked) => isChecked)
+      const updatedState = {}
+
+      for (const genre of genres) {
+        updatedState[genre] = !allChecked
+      }
+
+      return updatedState
+    })
   }
 
   return (
@@ -71,23 +99,44 @@ const Books = () => {
           ))}
         </tbody>
       </Table>
-      {genres.length > 0 && (
-        <ButtonGroup className="mb-2">
-          {genres.map((g) => (
+
+      <hr style={{ marginTop: '30px' }} />
+      <h3 style={{ marginTop: '20px', marginBottom: '20px' }}>Genres</h3>
+      <Row className="justify-content-center">
+        <Container>
+          <ButtonGroup className="mb-2">
             <ToggleButton
-              key={g}
-              id={`toggle-check-${g}`}
+              style={{ marginRight: '5px' }}
+              id={`toggle-all-genres`}
               size="sm"
               type="checkbox"
-              variant="outline-primary"
-              checked={checkedGenres[g]}
-              onChange={() => handleToggle(g)}
+              variant={allGenresSelected ? 'link' : 'link'}
+              checked={Object.values(checkedGenres).every(
+                (isChecked) => isChecked
+              )}
+              onChange={handleToggleAllGenres}
             >
-              {g}
+              {allGenresSelected ? 'deselect all' : 'select all'}
             </ToggleButton>
-          ))}
-        </ButtonGroup>
-      )}{' '}
+          </ButtonGroup>
+          {genres.length > 0 &&
+            genres.map((g) => (
+              <ButtonGroup className="mb-2">
+                <ToggleButton
+                  style={{ marginRight: '5px' }}
+                  id={`toggle-check-${g}`}
+                  size="sm"
+                  type="checkbox"
+                  variant="outline-primary"
+                  checked={checkedGenres[g]}
+                  onChange={() => handleToggle(g)}
+                >
+                  {g}
+                </ToggleButton>
+              </ButtonGroup>
+            ))}
+        </Container>
+      </Row>
     </Container>
   )
 }
