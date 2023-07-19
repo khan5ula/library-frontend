@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client'
 import { useState } from 'react'
 import { Button, Container, FloatingLabel, Form } from 'react-bootstrap'
-import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK } from '../queries'
+import { ALL_AUTHORS, ALL_BOOKS, ALL_GENRES, CREATE_BOOK } from '../queries'
 
 const NewBook = ({ setError }) => {
   const [title, setTitle] = useState('')
@@ -10,8 +10,15 @@ const NewBook = ({ setError }) => {
   const [genre, setGenre] = useState([])
   const [genres, setGenres] = useState([])
 
+  const selectedGenres = localStorage.getItem('selectedGenres')
+  console.log(JSON.stringify(selectedGenres))
+
   const [createBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+    refetchQueries: [
+      { query: ALL_BOOKS },
+      { query: ALL_AUTHORS },
+      { query: ALL_GENRES },
+    ],
     onError: (error) => {
       setError('Error occured while adding the book')
       console.log(JSON.stringify(error))
@@ -62,7 +69,7 @@ const NewBook = ({ setError }) => {
               onChange={({ target }) => setPublished(target.value)}
             />
           </FloatingLabel>
-          <FloatingLabel label="Add genre" className="mb-2">
+          <FloatingLabel label="Add genre to the list" className="mb-2">
             <Form.Control
               placeholder="crime"
               value={genre}

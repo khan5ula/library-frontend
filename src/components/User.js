@@ -13,6 +13,7 @@ const User = ({ setToken }) => {
     localStorage.clear()
     client.resetStore()
     navigate('/login')
+    window.location.reload()
   }
 
   useEffect(() => {

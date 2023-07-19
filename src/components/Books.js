@@ -5,6 +5,7 @@ import {
   ButtonGroup,
   ToggleButton,
   Row,
+  Badge,
 } from 'react-bootstrap'
 import { ALL_BOOKS, ALL_GENRES } from '../queries'
 import Loading from './Loading'
@@ -92,7 +93,20 @@ const Books = () => {
         <tbody>
           {books.map((b) => (
             <tr key={b.title}>
-              <td>{b.title}</td>
+              <td className="text-left">
+                <div style={{ marginBottom: '10px' }}>{b.title}</div>
+                {b.genres.map((genre, index) => (
+                  <Badge
+                    key={genre}
+                    pill
+                    bg="light"
+                    text="dark"
+                    className="me-2 mb-2"
+                  >
+                    {genre}
+                  </Badge>
+                ))}
+              </td>
               <td>{b.author.name}</td>
               <td>{b.published}</td>
             </tr>
@@ -110,7 +124,7 @@ const Books = () => {
               id={`toggle-all-genres`}
               size="sm"
               type="checkbox"
-              variant={allGenresSelected ? 'link' : 'link'}
+              variant="link"
               checked={Object.values(checkedGenres).every(
                 (isChecked) => isChecked
               )}
