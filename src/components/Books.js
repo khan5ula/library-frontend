@@ -135,7 +135,7 @@ const Books = () => {
           </ButtonGroup>
           {genres.length > 0 &&
             genres.map((g) => (
-              <ButtonGroup className="mb-2">
+              <ButtonGroup className="mb-2" key={g}>
                 <ToggleButton
                   style={{ marginRight: '5px' }}
                   id={`toggle-check-${g}`}

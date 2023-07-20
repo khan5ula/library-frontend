@@ -7,7 +7,7 @@ import LoginForm from './components/LoginForm'
 import Menu from './components/Menu'
 import NewBook from './components/NewBook'
 import Notification from './components/Notification'
-import User from './components/User'
+import Home from './components/Home'
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -22,7 +22,7 @@ const App = () => {
 
   return (
     <Container style={{ marginTop: '20px', marginBottom: '20px' }}>
-      <Menu />
+      <Menu token={token} />
       <Notification errorMessage={errorMessage} />
       <Row className="justify-content-md-center">
         <Col xs={12} lg={6}></Col>
@@ -35,7 +35,7 @@ const App = () => {
           path="/login"
           element={<LoginForm setToken={setToken} setError={notify} />}
         />
-        <Route path="/user" element={<User setToken={setToken} />} />
+        <Route path="/home" element={<Home setToken={setToken} />} />
         <Route path="/" element={<Authors setError={notify} />} />
       </Routes>
     </Container>

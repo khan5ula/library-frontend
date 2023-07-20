@@ -1,9 +1,7 @@
 import { Container, Nav, Navbar } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
-const Menu = () => {
-  const token = localStorage.getItem('library-user-token')
-
+const Menu = ({ token }) => {
   const padding = {
     paddingLeft: 10,
   }
@@ -14,6 +12,11 @@ const Menu = () => {
         <Container>
           <Navbar.Brand>Library</Navbar.Brand>
           <Nav className="me-auto">
+            <Nav.Link href={token ? '/home' : '/login'} as="span">
+              <Link style={padding} to={token ? 'home' : 'login'}>
+                {token ? 'Home' : 'Login'}
+              </Link>
+            </Nav.Link>
             <Nav.Link href="/" as="span">
               <Link style={padding} to="/">
                 Authors
@@ -31,11 +34,6 @@ const Menu = () => {
                 </Link>
               </Nav.Link>
             )}
-            <Nav.Link href={token ? '/user' : '/login'} as="span">
-              <Link style={padding} to={token ? 'user' : 'login'}>
-                {token ? 'User' : 'Login'}
-              </Link>
-            </Nav.Link>
           </Nav>
         </Container>
       </Navbar>

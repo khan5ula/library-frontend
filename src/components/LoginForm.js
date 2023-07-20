@@ -20,14 +20,13 @@ const LoginForm = ({ setError, setToken }) => {
       const token = result.data.login.value
       setToken(token)
       localStorage.setItem('library-user-token', token)
-      navigate('/')
+      navigate('/home')
     }
   }, [result.data]) // eslint-disable-line
 
   const submit = async (event) => {
     event.preventDefault()
     login({ variables: { username, password } })
-    localStorage.setItem('library-username', username)
   }
 
   return (

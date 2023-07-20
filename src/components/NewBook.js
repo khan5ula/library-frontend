@@ -10,9 +10,6 @@ const NewBook = ({ setError }) => {
   const [genre, setGenre] = useState([])
   const [genres, setGenres] = useState([])
 
-  const selectedGenres = localStorage.getItem('selectedGenres')
-  console.log(JSON.stringify(selectedGenres))
-
   const [createBook] = useMutation(CREATE_BOOK, {
     refetchQueries: [
       { query: ALL_BOOKS },
