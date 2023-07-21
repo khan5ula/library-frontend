@@ -4,14 +4,14 @@ import { Button, Container, FloatingLabel, Form, Table } from 'react-bootstrap'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 import Loading from './Loading'
 
-const Authors = ({ setError }) => {
+const Authors = ({ setMessage }) => {
   const [name, setName] = useState('')
   const [year, setYear] = useState('')
 
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
     onError: (error) => {
-      setError(error.graphQLErrors[0].message)
+      setMessage(error.graphQLErrors[0].message)
     },
   })
 

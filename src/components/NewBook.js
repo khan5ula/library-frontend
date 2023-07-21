@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Button, Container, FloatingLabel, Form } from 'react-bootstrap'
 import { ALL_AUTHORS, ALL_BOOKS, ALL_GENRES, CREATE_BOOK } from '../queries'
 
-const NewBook = ({ setError }) => {
+const NewBook = ({ setMessage }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('')
@@ -17,7 +17,7 @@ const NewBook = ({ setError }) => {
       { query: ALL_GENRES },
     ],
     onError: (error) => {
-      setError('Error occured while adding the book')
+      setMessage('Error occured while adding the book')
       console.log(JSON.stringify(error))
     },
   })

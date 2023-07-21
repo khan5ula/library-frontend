@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Alert } from 'react-bootstrap'
 
-const Notification = ({ errorMessage }) => {
+const Notification = ({ message }) => {
   const [show, setShow] = useState(true)
 
-  if (show && errorMessage) {
+  if (show && message) {
     return (
       <Alert
         variant="info"
@@ -14,7 +14,7 @@ const Notification = ({ errorMessage }) => {
           marginTop: '20px',
         }}
       >
-        {errorMessage}
+        {message}
       </Alert>
     )
   }
