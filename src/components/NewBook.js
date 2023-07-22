@@ -1,7 +1,8 @@
 import { useMutation } from '@apollo/client'
 import { useState } from 'react'
 import { Button, Container, FloatingLabel, Form } from 'react-bootstrap'
-import { ALL_AUTHORS, ALL_BOOKS, ALL_GENRES, CREATE_BOOK } from '../queries'
+import { updateCache } from '../App'
+import { ALL_BOOKS, ALL_GENRES, CREATE_BOOK } from '../queries'
 
 const NewBook = ({ setMessage }) => {
   const [title, setTitle] = useState('')
@@ -11,14 +12,15 @@ const NewBook = ({ setMessage }) => {
   const [genres, setGenres] = useState([])
 
   const [createBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [
-      { query: ALL_BOOKS },
-      { query: ALL_AUTHORS },
-      { query: ALL_GENRES },
-    ],
+    refetchQueries: { query: ALL_GENRES },
     onError: (error) => {
       setMessage('Error occured while adding the book')
       console.log(JSON.stringify(error))
+    },
+    update: (cache, { data }) => {
+      const { addBook: addedBook } = data
+      const { author } = addedBook
+      updateCache(cache, ALL_BOOKS, addedBook, author)
     },
   })
 

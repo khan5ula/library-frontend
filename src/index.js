@@ -17,7 +17,7 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { createClient } from 'graphql-ws'
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('library-user-token')
+  const token = localStorage.getItem('token')
   return {
     headers: { ...headers, authorization: token ? `Bearer ${token}` : null },
   }

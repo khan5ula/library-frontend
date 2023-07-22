@@ -24,12 +24,9 @@ const Books = () => {
 
   const booksResult = useQuery(ALL_BOOKS, {
     variables: { genres: selectedGenres },
-    pollInterval: 10000,
   })
 
-  const genresResult = useQuery(ALL_GENRES, {
-    pollInterval: 10000,
-  })
+  const genresResult = useQuery(ALL_GENRES)
 
   useEffect(() => {
     if (genresResult.data) {

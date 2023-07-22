@@ -4,14 +4,17 @@ import { Button, Container, FloatingLabel, Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { LOGIN } from '../queries'
 
-const LoginForm = ({ setError, setToken }) => {
+const LoginForm = ({ setMessage, setToken }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
 
   const [login, result] = useMutation(LOGIN, {
     onError: (error) => {
-      setError(error.graphQLErrors[0].message)
+      setMessage(error.graphQLErrors[0].message)
+    },
+    onCompleted: () => {
+      localStorage.setItem('library-username', username)
     },
   })
 
@@ -19,8 +22,9 @@ const LoginForm = ({ setError, setToken }) => {
     if (result.data) {
       const token = result.data.login.value
       setToken(token)
-      localStorage.setItem('library-user-token', token)
+      localStorage.setItem('token', token)
       navigate('/home')
+      window.location.reload()
     }
   }, [result.data]) // eslint-disable-line
 

@@ -24,9 +24,7 @@ const Authors = ({ setMessage }) => {
     setYear('')
   }
 
-  const result = useQuery(ALL_AUTHORS, {
-    pollInterval: 10000,
-  })
+  const result = useQuery(ALL_AUTHORS)
 
   if (result.loading) {
     return (
@@ -57,7 +55,7 @@ const Authors = ({ setMessage }) => {
         </thead>
         <tbody>
           {authors.map((a) => (
-            <tr key={a.name}>
+            <tr key={a.id}>
               <td>{a.name}</td>
               <td>{a.born}</td>
               <td>{a.bookCount}</td>

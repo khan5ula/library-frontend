@@ -1,4 +1,4 @@
-import { useSubscription } from '@apollo/client'
+import { useApolloClient, useSubscription } from '@apollo/client'
 import { useState } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import { Route, Routes } from 'react-router-dom'
@@ -9,11 +9,45 @@ import LoginForm from './components/LoginForm'
 import Menu from './components/Menu'
 import NewBook from './components/NewBook'
 import Notification from './components/Notification'
-import { BOOK_ADDED } from './queries'
+import { ALL_BOOKS, AUTHOR_DETAILS, BOOK_ADDED, BOOK_DETAILS } from './queries'
+import { useToken } from './hooks'
+
+export const updateCache = (cache, query, addedBook, addedAuthor) => {
+  if (addedBook) {
+    cache.modify({
+      fields: {
+        allBooks(existingBooks = []) {
+          const newBookRef = cache.writeFragment({
+            fragmentName: 'BookDetails',
+            data: addedBook,
+            fragment: BOOK_DETAILS,
+          })
+          return [...existingBooks, newBookRef]
+        },
+      },
+    })
+  }
+
+  if (addedAuthor) {
+    cache.modify({
+      fields: {
+        allAuthors(existingAuthors = []) {
+          const newAuthorRef = cache.writeFragment({
+            fragmentName: 'AuthorDetails',
+            data: addedAuthor,
+            fragment: AUTHOR_DETAILS,
+          })
+          return [...existingAuthors, newAuthorRef]
+        },
+      },
+    })
+  }
+}
 
 const App = () => {
-  const [token, setToken] = useState(null)
+  const { token, setToken } = useToken()
   const [message, setMessage] = useState(null)
+  const client = useApolloClient()
 
   const notify = (message) => {
     setMessage(message)
@@ -24,8 +58,9 @@ const App = () => {
 
   useSubscription(BOOK_ADDED, {
     onData: ({ data }) => {
-      const bookTitle = data.data.bookAdded.title
-      notify(`New book ${bookTitle} was just added`)
+      const addedBook = data.data.bookAdded
+      notify(`New book ${addedBook.title} was just added`)
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook)
     },
   })
 
