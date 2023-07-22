@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import { Button, Container, FloatingLabel, Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import { LOGIN } from '../queries'
+import { LOGIN, ME } from '../queries'
 
 const LoginForm = ({ setMessage, setToken }) => {
   const [username, setUsername] = useState('')
@@ -14,7 +14,7 @@ const LoginForm = ({ setMessage, setToken }) => {
       setMessage(error.graphQLErrors[0].message)
     },
     onCompleted: () => {
-      localStorage.setItem('library-username', username)
+      localStorage.setItem('username', username)
     },
   })
 
@@ -24,7 +24,6 @@ const LoginForm = ({ setMessage, setToken }) => {
       setToken(token)
       localStorage.setItem('token', token)
       navigate('/home')
-      window.location.reload()
     }
   }, [result.data]) // eslint-disable-line
 

@@ -1,7 +1,7 @@
 import { useApolloClient } from '@apollo/client'
+import { Button, Container } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import Recommendations from './Recommendations'
-import { Container, Button } from 'react-bootstrap'
 
 const Home = ({ token, setToken }) => {
   const client = useApolloClient()
@@ -14,6 +14,7 @@ const Home = ({ token, setToken }) => {
     localStorage.clear()
     client.resetStore()
     navigate('/login')
+    window.location.reload()
   }
 
   return (

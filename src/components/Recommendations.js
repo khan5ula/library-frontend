@@ -18,8 +18,6 @@ const Recommendations = () => {
     variables: { genres: meResult.data?.me?.favoriteGenre },
   })
 
-  console.log(`me: ${JSON.stringify(me)}`)
-
   if (meResult.loading || booksResult.loading || me === null) {
     return (
       <div>
